@@ -1,5 +1,6 @@
 package uk.tellowharton.mc.brandon;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -12,7 +13,7 @@ public class Congrats extends JavaPlugin {
     @Override
     public void onEnable(){
         this.saveDefaultConfig();
-        brandon = getConfig().getString("name");
+        brandon = getConfig().getString("player");
         getServer().getPluginManager().registerEvents(new MyListener(this), this);
     }
 

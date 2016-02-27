@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAchievementAwardedEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created by Aaron on 27/02/2016.
@@ -18,10 +20,16 @@ public class MyListener implements Listener {
     }
 
     @EventHandler
-    public void onAchievement(PlayerAchievementAwardedEvent e){
+    public void onAchievement(final PlayerAchievementAwardedEvent e){
+
         Player p = e.getPlayer();
-        if(p.getName().equals(congrats.getBrandon())){
-            Bukkit.broadcastMessage("congrats");
+        if(p.getName().equalsIgnoreCase(congrats.getBrandon())) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Bukkit.broadcastMessage("Server to Brandon: congrats");
+                }
+            }.runTaskLater(congrats, 60);
         }
     }
 }
