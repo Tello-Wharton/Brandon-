@@ -7,8 +7,16 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Congrats extends JavaPlugin {
 
+    private String brandon;
+
     @Override
     public void onEnable(){
-        //lel
+        this.saveDefaultConfig();
+        brandon = getConfig().getString("name");
+        getServer().getPluginManager().registerEvents(new MyListener(this), this);
+    }
+
+    public String getBrandon(){
+        return brandon;
     }
 }
