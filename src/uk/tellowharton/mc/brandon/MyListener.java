@@ -2,14 +2,19 @@ package uk.tellowharton.mc.brandon;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -32,17 +37,57 @@ public class MyListener implements Listener {
                 @Override
                 public void run() {
                     Bukkit.broadcastMessage("Server to Brandon: congrats");
-                    final Iterator<? extends Player> playerIterator = Bukkit.getOnlinePlayers().iterator();
+
+                    Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
+                    final Iterator<? extends Player> playerIterator = onlinePlayers.iterator();
+
+                    final int level = onlinePlayers.size();
                     int tick = 20;
                     while (playerIterator.hasNext()){
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                playerIterator.next().chat("congrats");
-                                player.getInventory().addItem(new ItemStack(Material.FURNACE,1));
-                            }
-                        }.runTaskLater(congrats,tick);
-                        tick+= 20;
+                        final Player p;
+                        if (!(p = playerIterator.next()).getName().equalsIgnoreCase(congrats.getBrandon())) {
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    p.chat("congrats");
+                                    ItemStack is = new ItemStack(Material.FURNACE, 1);
+                                    ItemMeta im = is.getItemMeta();
+                                    im.addEnchant(new Enchantment(level) {
+                                        @Override
+                                        public String getName() {
+                                            return "congrats";
+                                        }
+
+                                        @Override
+                                        public int getMaxLevel() {
+                                            return level;
+                                        }
+
+                                        @Override
+                                        public int getStartLevel() {
+                                            return level;
+                                        }
+
+                                        @Override
+                                        public EnchantmentTarget getItemTarget() {
+                                            return null;
+                                        }
+
+                                        @Override
+                                        public boolean conflictsWith(Enchantment enchantment) {
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean canEnchantItem(ItemStack itemStack) {
+                                            return false;
+                                        }
+                                    },level,true);
+                                    player.getInventory().addItem();
+                                }
+                            }.runTaskLater(congrats, tick);
+                            tick += 20;
+                        }
                     }
                 }
             }.runTaskLater(congrats, 60);
