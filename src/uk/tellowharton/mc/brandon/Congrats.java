@@ -13,7 +13,7 @@ public class Congrats extends JavaPlugin {
     @Override
     public void onEnable(){
         this.saveDefaultConfig();
-        brandon = getConfig().getString("player");
+        brandon = getConfig().getString("brandon");
         getServer().getPluginManager().registerEvents(new MyListener(this), this);
     }
 
